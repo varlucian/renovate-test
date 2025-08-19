@@ -1,0 +1,58 @@
+name: Renovate
+
+on:
+  # Run on schedule (daily at 2 AM UTC)
+  schedule:
+    - cron: "0 2 * * *"
+
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: "Dry-run"
+        required: false
+        type: boolean
+        default: false
+      logLevel:
+        description: "Log-level"
+        required: false
+        type: choice
+        default: "debug"
+        options:
+          - info
+          - debug
+          - trace
+
+  # Run on pushes to renovate.json
+  push:
+    paths:
+      - ".github/workflows/renovate.yml"
+      - "renovate.json"
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v43.0.8
+        with:
+          configurationFile: renovate.json
+          token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          # Enable dry-run if manually triggered with dry-run option
+          DRY_RUN: ${{ github.event.inputs.dryRun || false }}
+
+          # Set log level (defaults to debug for better troubleshooting)
+          LOG_LEVEL: ${{ github.event.inputs.logLevel || 'debug' }}
+
+          # Renovate environment variables
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          RENOVATE_USERNAME: renovate[bot]
+          RENOVATE_GIT_AUTHOR: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+          # Optional: Configure Renovate platform
+          RENOVATE_PLATFORM: github
+          RENOVATE_ENDPOINT: https://api.github.com/
