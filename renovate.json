@@ -6,7 +6,7 @@
   "packageRules": [
     {
       "matchPackagePatterns": [
-        "^hashicorp/terraform-terraform-"
+        "^hashicorp/terraform-"
       ],
       "groupName": null,
       "major": {
@@ -37,9 +37,8 @@
     }
   ],
   "commitMessageAction": "update",
-  "commitMessageTopic": "{{depName}}",
+  "commitMessageTopic": "{{packageName}}",
   "commitMessageExtra": "to {{newVersion}}",
-  "prBodyTemplate": "This PR updates {{depName}} from {{currentVersion}} to {{newVersion}}.\n\n**Release Notes:**\n{{{changelogUrl}}}",
   "timezone": "UTC",
   "labels": [
     "dependencies",
