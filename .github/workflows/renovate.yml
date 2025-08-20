@@ -17,7 +17,7 @@ on:
         description: "Log-level"
         required: false
         type: choice
-        default: "debug"
+        default: "info"
         options:
           - info
           - debug
@@ -40,7 +40,7 @@ jobs:
         uses: renovatebot/github-action@v43.0.8
         with:
           configurationFile: renovate.json
-          token: ${{ secrets.RENOVATE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
         env:
           # Enable dry-run if manually triggered with dry-run option
           DRY_RUN: ${{ github.event.inputs.dryRun || false }}
